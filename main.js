@@ -1,6 +1,12 @@
-// 用 tftData 產生題目
+/ TFT Item Quiz - main.js (supports optional icons in data.js)
+// Requires:
+// - index.html has: #components, #options, #feedback, #nextBtn, #scoreText
+// - data.js defines: const tftData = { components: [...], combined: [...] }
+// - Each item can optionally have: icon: "https://..."
+
 let score = 0;
 let total = 0;
+
 let currentAnswerId = null;
 let answered = false;
 
@@ -10,82 +16,160 @@ const feedbackDiv = document.getElementById("feedback");
 const nextBtn = document.getElementById("nextBtn");
 const scoreText = document.getElementById("scoreText");
 
-function getRandomElement(arr) {
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function pickRandom(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function createQuestion() {
-  answered = false;
-  feedbackDiv.textContent = "";
-  nextBtn.classList.add("disabled");
+function getComponentById(id) {
+  return tftData.components.find(c => c.id === id) || { id, name: id };
+}
 
-  // 清空畫面
+function getCombinedById(id) {
+  return tftData.combined.find(i => i.id === id) || { id, name: id, components: [] };
+}
+
+function makeItemBox({ name, icon }, onClick) {
+  const box = document.createElement("div");
+  box.className = "item-box";
+
+  // If your CSS supports images, it will show nicely; otherwise it's fine.
+  if (icon) {
+    const img = document.createElement("img");
+    img.src = icon;
+    img.alt = name || "";
+    img.loading = "lazy";
+    // if icon link broken, fallback to text-only
+    img.onerror = () => img.remove();
+    box.appendChild(img);
+  }
+
+  const text = document.createElement("div");
+  text.textContent = name || "";
+  box.appendChild(text);
+
+  if (typeof onClick === "function") {
+    box.addEventListener("click", onClick);
+  }
+  return box;
+}
+
+function setFeedback(text, type) {
+  // type: "correct" | "wrong" | ""
+  feedbackDiv.textContent = text || "";
+  feedbackDiv.classList.remove("correct", "wrong");
+  if (type === "correct") feedbackDiv.classList.add("correct");
+  if (type === "wrong") feedbackDiv.classList.add("wrong");
+}
+
+function setNextEnabled(enabled) {
+  if (enabled) nextBtn.classList.remove("disabled");
+  else nextBtn.classList.add("disabled");
+}
+
+function lockOptions() {
+  const boxes = optionsDiv.querySelectorAll(".item-box");
+  boxes.forEach(b => b.classList.add("disabled"));
+}
+
+function unlockOptions() {
+  const boxes = optionsDiv.querySelectorAll(".item-box");
+  boxes.forEach(b => b.classList.remove("disabled"));
+}
+
+function updateScore() {
+  scoreText.textContent = `得分：${score} / ${total}`;
+}
+
+function createQuestion() {
+  // basic safety checks
+  if (!window.tftData || !Array.isArray(tftData.components) || !Array.isArray(tftData.combined)) {
+    setFeedback("資料載入失敗：請檢查 data.js", "wrong");
+    return;
+  }
+  if (tftData.combined.length < 2) {
+    setFeedback("合成裝備數量不足（combined 太少）", "wrong");
+    return;
+  }
+
+  answered = false;
+  currentAnswerId = null;
+
+  setFeedback("", "");
+  setNextEnabled(false);
+
   componentsDiv.innerHTML = "";
   optionsDiv.innerHTML = "";
 
-  const combined = tftData.combined;
-  const components = tftData.components;
-
-  // 1. 隨機抽一件合成裝
-  const correctItem = getRandomElement(combined);
+  // Pick a random combined item as the correct answer
+  const correctItem = pickRandom(tftData.combined);
   currentAnswerId = correctItem.id;
 
-  // 2. 顯示兩件散件
-  correctItem.components.forEach(cid => {
-    const comp = components.find(c => c.id === cid);
-    const div = document.createElement("div");
-    div.className = "item-box";
-    div.textContent = comp ? comp.name : cid;
-    componentsDiv.appendChild(div);
+  // Display the 2 components for this combined item
+  const compObjs = (correctItem.components || []).map(getComponentById);
+  compObjs.forEach(comp => {
+    const box = makeItemBox(comp, null);
+    componentsDiv.appendChild(box);
   });
 
-  // 3. 準備選項（1 正確 + 幾個錯誤）
-  const optionsSet = new Set();
-  optionsSet.add(correctItem.id);
+  // Build options list: 1 correct + (up to) 3 wrong
+  const optionCount = Math.min(4, tftData.combined.length);
+  const options = [correctItem];
 
-  while (optionsSet.size < Math.min(4, combined.length)) {
-    const other = getRandomElement(combined);
-    optionsSet.add(other.id);
+  // Add random wrong options, avoiding duplicates
+  while (options.length < optionCount) {
+    const candidate = pickRandom(tftData.combined);
+    if (!options.some(o => o.id === candidate.id)) options.push(candidate);
   }
 
-  const optionIds = Array.from(optionsSet)
-    .map(id => combined.find(item => item.id === id))
-    .sort(() => Math.random() - 0.5);
+  const shuffled = shuffle(options);
 
-  optionIds.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "item-box";
-    div.textContent = item.name;
-    div.addEventListener("click", () => handleAnswer(div, item.id));
-    optionsDiv.appendChild(div);
+  shuffled.forEach(item => {
+    const box = makeItemBox(item, () => handleAnswer(box, item.id));
+    optionsDiv.appendChild(box);
   });
+
+  unlockOptions();
 }
 
-function handleAnswer(element, chosenId) {
+function handleAnswer(clickedBox, chosenId) {
   if (answered) return;
   answered = true;
   total += 1;
 
-  const optionBoxes = document.querySelectorAll(".options .item-box");
-  optionBoxes.forEach(box => box.classList.add("disabled"));
+  lockOptions();
+
+  const correctItem = getCombinedById(currentAnswerId);
 
   if (chosenId === currentAnswerId) {
     score += 1;
-    element.classList.add("correct");
-    feedbackDiv.textContent = "答啱喇！";
+    clickedBox.classList.add("correct");
+    setFeedback("答啱喇！", "correct");
   } else {
-    element.classList.add("wrong");
-    feedbackDiv.textContent = "答錯咗。綠色框先係正確答案。";
+    clickedBox.classList.add("wrong");
+    setFeedback(`答錯咗。正確答案係：${correctItem.name}`, "wrong");
 
-    optionBoxes.forEach(box => {
-      if (box.textContent === tftData.combined.find(i => i.id === currentAnswerId).name) {
+    // highlight correct option
+    const boxes = optionsDiv.querySelectorAll(".item-box");
+    boxes.forEach(box => {
+      // compare by displayed name (simple) - robust enough for this small app
+      const text = box.textContent || "";
+      if (text.trim() === (correctItem.name || "").trim()) {
         box.classList.add("correct");
       }
     });
   }
 
-  scoreText.textContent = `得分：${score} / ${total}`;
-  nextBtn.classList.remove("disabled");
+  updateScore();
+  setNextEnabled(true);
 }
 
 nextBtn.addEventListener("click", () => {
@@ -93,5 +177,6 @@ nextBtn.addEventListener("click", () => {
   createQuestion();
 });
 
-// 初始載入第一題
+// Start
+updateScore();
 createQuestion();
