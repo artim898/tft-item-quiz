@@ -8,6 +8,9 @@ const tftData = {
     { id: "needlessly_large_rod", name: "Needlessly Large Rod" },
     { id: "tear", name: "Tear of the Goddess" },
     { id: "sparring_gloves", name: "Sparring Gloves" }
+    { id: "frying_pan", name: "Frying Pan" },
+    { id: "giants_belt", name: "Giant's Belt" },
+    { id: "sparring_gloves", name: "Sparring Gloves" },
   ],
   combined: [
     {
