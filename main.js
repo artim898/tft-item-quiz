@@ -9,11 +9,16 @@ const feedbackDiv = document.getElementById("feedback");
 const nextBtn = document.getElementById("nextBtn");
 const scoreText = document.getElementById("scoreText");
 
-function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-function byId(list, id) { return list.find(x => x.id === id); }
+function pickRandom(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function byId(list, id) {
+  return list.find(x => x.id === id);
+}
 
 function updateScore() {
-  scoreText.textContent = `得分：${score} / ${total}`;
+  scoreText.textContent = "得分：" + score + " / " + total;
 }
 
 function setNextEnabled(enabled) {
@@ -53,7 +58,7 @@ function createItemBox(item, clickable, onClick) {
 
   const name = document.createElement("div");
   name.className = "item-name";
-  name.textContent = item?.name || "";
+  name.textContent = (item && item.name) ? item.name : "";
   box.appendChild(name);
 
   return box;
@@ -64,7 +69,10 @@ function lockOptions() {
 }
 
 function createQuestion() {
-  if (!window.tftData) { setFeedback("data.js 未載入", "wrong"); return; }
+  if (!window.tftData) {
+    setFeedback("data.js 未載入（tftData 不存在）", "wrong");
+    return;
+  }
 
   answered = false;
   setFeedback("", "");
@@ -109,7 +117,8 @@ function answer(chosenId, chosenBox) {
     setFeedback("答啱喇！", "correct");
   } else {
     chosenBox.classList.add("wrong");
-    setFeedback(`答錯咗。正確答案係：${correctItem?.name || ""}`, "wrong");
+    const correctName = correctItem && correctItem.name ? correctItem.name : "";
+    setFeedback("答錯咗。正確答案係：" + correctName, "wrong");
   }
 
   updateScore();
