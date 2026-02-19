@@ -1,6 +1,6 @@
 const tftData = {
   components: [
-    { id: "bf_sword", name: "B.F.劍" },
+    { id: "bf_sword", name: "B.F.劍", icon: "https://raw.communitydragon.org/16.1/game/assets/maps/particles/tft/item_icons/standard/bf_sword.png" },
     { id: "recurve_bow", name: "反曲弓" },
     { id: "chain_vest", name: "鎖甲" },
     { id: "negatron_cloak", name: "負極斗篷" },
