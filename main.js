@@ -22,13 +22,23 @@ function updateScore() {
 }
 
 function setNextEnabled(enabled) {
-  nextBtn.classList.toggle("disabled", !enabled);
+  if (enabled) nextBtn.classList.remove("disabled");
+  else nextBtn.classList.add("disabled");
 }
 
 function setFeedback(text, type) {
   feedbackDiv.textContent = text || "";
   feedbackDiv.classList.remove("correct", "wrong");
   if (type) feedbackDiv.classList.add(type);
+}
+
+function clearUI() {
+  componentsDiv.innerHTML = "";
+  optionsDiv.innerHTML = "";
+}
+
+function lockOptions() {
+  optionsDiv.querySelectorAll(".item-box").forEach(b => b.classList.add("disabled"));
 }
 
 function createItemBox(item, clickable, onClick) {
@@ -64,35 +74,37 @@ function createItemBox(item, clickable, onClick) {
   return box;
 }
 
-function lockOptions() {
-  optionsDiv.querySelectorAll(".item-box").forEach(b => b.classList.add("disabled"));
-}
-
 function createQuestion() {
-  if (typeof tftData === "undefined") {
-  setFeedback("data.js 未載入（tftData 不存在）", "wrong");
-  return;
-}
+  if (!window.tftData) {
+    setFeedback("data.js 未載入（window.tftData 不存在）", "wrong");
+    return;
+  }
+  if (!Array.isArray(window.tftData.components) || !Array.isArray(window.tftData.combined)) {
+    setFeedback("data.js 格式錯（components/combined 唔係 array）", "wrong");
+    return;
+  }
+  if (window.tftData.combined.length < 2) {
+    setFeedback("合成裝數量太少", "wrong");
+    return;
+  }
 
   answered = false;
   setFeedback("", "");
   setNextEnabled(false);
+  clearUI();
 
-  componentsDiv.innerHTML = "";
-  optionsDiv.innerHTML = "";
-
-  const correct = pickRandom(tftData.combined);
+  const correct = pickRandom(window.tftData.combined);
   currentAnswerId = correct.id;
 
   (correct.components || []).forEach(cid => {
-    const comp = byId(tftData.components, cid) || { id: cid, name: cid };
+    const comp = byId(window.tftData.components, cid) || { id: cid, name: cid };
     componentsDiv.appendChild(createItemBox(comp, false, null));
   });
 
-  const optionCount = Math.min(4, tftData.combined.length);
+  const optionCount = Math.min(4, window.tftData.combined.length);
   const options = [correct];
   while (options.length < optionCount) {
-    const c = pickRandom(tftData.combined);
+    const c = pickRandom(window.tftData.combined);
     if (!options.some(o => o.id === c.id)) options.push(c);
   }
   options.sort(() => Math.random() - 0.5);
@@ -107,9 +119,10 @@ function answer(chosenId, chosenBox) {
   if (answered) return;
   answered = true;
   total += 1;
+
   lockOptions();
 
-  const correctItem = byId(tftData.combined, currentAnswerId);
+  const correctItem = byId(window.tftData.combined, currentAnswerId);
 
   if (chosenId === currentAnswerId) {
     score += 1;
@@ -117,7 +130,7 @@ function answer(chosenId, chosenBox) {
     setFeedback("答啱喇！", "correct");
   } else {
     chosenBox.classList.add("wrong");
-    const correctName = correctItem && correctItem.name ? correctItem.name : "";
+    const correctName = (correctItem && correctItem.name) ? correctItem.name : "";
     setFeedback("答錯咗。正確答案係：" + correctName, "wrong");
   }
 
