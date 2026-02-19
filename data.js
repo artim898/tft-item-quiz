@@ -8,33 +8,65 @@ const tftData = {
     { id: "needlessly_large_rod", name: "Needlessly Large Rod" },
     { id: "tear", name: "Tear of the Goddess" },
     { id: "sparring_gloves", name: "Sparring Gloves" },
-    { id: "frying_pan", name: "Frying Pan" }
+    { id: "frying_pan", name: "Frying Pan" },
+    { id: "spatula", name: "Spatula" }
   ],
   combined: [
-    {
-      id: "giant_slayer",
-      name: "Giant Slayer",
-      components: ["bf_sword", "recurve_bow"]
-    },
-    {
-      id: "deathblade",
-      name: "Deathblade",
-      components: ["bf_sword", "chain_vest"]
-    },
-    {
-      id: "gargoyle_stoneplate",
-      name: "Gargoyle Stoneplate",
-      components: ["chain_vest", "negatron_cloak"]
-    },
-    {
-      id: "red_buff",
-      name: "Red Buff",
-      components: ["giants_belt", "frying_pan"]
-    },
-    {
-      id: "rabadons_deathcap",
-      name: "Rabadon's Deathcap",
-      components: ["needlessly_large_rod", "needlessly_large_rod"]
-    }
+    // 全部 55 件合成裝（按 cheat sheet 完整列出）[page:1]
+    { id: "adaptive_helm", name: "Adaptive Helm", components: ["tear", "negatron_cloak"] },
+    { id: "arcanist_emblem", name: "Arcanist Emblem", components: ["frying_pan", "needlessly_large_rod"] },
+    { id: "archangel_s_staff", name: "Archangel's Staff", components: ["tear", "needlessly_large_rod"] },
+    { id: "bilgewater_emblem", name: "Bilgewater Emblem", components: ["spatula", "tear"] },
+    { id: "bloodthirster", name: "Bloodthirster", components: ["bf_sword", "negatron_cloak"] },
+    { id: "blue_buff", name: "Blue Buff", components: ["tear", "tear"] },
+    { id: "bramble_vest", name: "Bramble Vest", components: ["chain_vest", "chain_vest"] },
+    { id: "bruiser_emblem", name: "Bruiser Emblem", components: ["frying_pan", "giants_belt"] },
+    { id: "crownguard", name: "Crownguard", components: ["needlessly_large_rod", "chain_vest"] },
+    { id: "deathblade", name: "Deathblade", components: ["bf_sword", "bf_sword"] },
+    { id: "defender_emblem", name: "Defender Emblem", components: ["frying_pan", "chain_vest"] },
+    { id: "demacia_emblem", name: "Demacia Emblem", components: ["spatula", "chain_vest"] },
+    { id: "dragon_s_claw", name: "Dragon's Claw", components: ["negatron_cloak", "negatron_cloak"] },
+    { id: "edge_of_night", name: "Edge of Night", components: ["bf_sword", "chain_vest"] },
+    { id: "evenshroud", name: "Evenshroud", components: ["negatron_cloak", "giants_belt"] },
+    { id: "executioner_emblem", name: "Executioner Emblem", components: ["frying_pan", "sparring_gloves"] },
+    { id: "freljord_emblem", name: "Freljord Emblem", components: ["spatula", "giants_belt"] },
+    { id: "gargoyle_stoneplate", name: "Gargoyle Stoneplate", components: ["chain_vest", "negatron_cloak"] },
+    { id: "giant_slayer", name: "Giant Slayer", components: ["bf_sword", "recurve_bow"] },
+    { id: "guinsoo_s_rageblade", name: "Guinsoo's Rageblade", components: ["recurve_bow", "needlessly_large_rod"] },
+    { id: "hand_of_justice", name: "Hand of Justice", components: ["sparring_gloves", "tear"] },
+    { id: "hextech_gunblade", name: "Hextech Gunblade", components: ["bf_sword", "needlessly_large_rod"] },
+    { id: "infinity_edge", name: "Infinity Edge", components: ["bf_sword", "sparring_gloves"] },
+    { id: "invoker_emblem", name: "Invoker Emblem", components: ["frying_pan", "tear"] },
+    { id: "ionia_emblem", name: "Ionia Emblem", components: ["spatula", "needlessly_large_rod"] },
+    { id: "ionic_spark", name: "Ionic Spark", components: ["needlessly_large_rod", "negatron_cloak"] },
+    { id: "jeweled_gauntlet", name: "Jeweled Gauntlet", components: ["sparring_gloves", "needlessly_large_rod"] },
+    { id: "juggernaut_emblem", name: "Juggernaut Emblem", components: ["frying_pan", "negatron_cloak"] },
+    { id: "kraken_s_fury", name: "Kraken's Fury", components: ["recurve_bow", "negatron_cloak"] },
+    { id: "last_whisper", name: "Last Whisper", components: ["recurve_bow", "sparring_gloves"] },
+    { id: "morellonomicon", name: "Morellonomicon", components: ["needlessly_large_rod", "giants_belt"] },
+    { id: "nashor_s_tooth", name: "Nashor's Tooth", components: ["recurve_bow", "giants_belt"] },
+    { id: "noxus_emblem", name: "Noxus Emblem", components: ["spatula", "bf_sword"] },
+    { id: "protector_s_vow", name: "Protector's Vow", components: ["chain_vest", "tear"] },
+    { id: "quicksilver", name: "Quicksilver", components: ["negatron_cloak", "sparring_gloves"] },
+    { id: "quickstriker_emblem", name: "Quickstriker Emblem", components: ["frying_pan", "recurve_bow"] },
+    { id: "rabadon_s_deathcap", name: "Rabadon's Deathcap", components: ["needlessly_large_rod", "needlessly_large_rod"] },
+    { id: "red_buff", name: "Red Buff", components: ["recurve_bow", "recurve_bow"] },
+    { id: "slayer_emblem", name: "Slayer Emblem", components: ["frying_pan", "bf_sword"] },
+    { id: "spear_of_shojin", name: "Spear of Shojin", components: ["bf_sword", "tear"] },
+    { id: "spirit_visage", name: "Spirit Visage", components: ["tear", "giants_belt"] },
+    { id: "steadfast_heart", name: "Steadfast Heart", components: ["sparring_gloves", "chain_vest"] },
+    { id: "sterak_s_gage", name: "Sterak's Gage", components: ["bf_sword", "giants_belt"] },
+    { id: "striker_s_flail", name: "Striker's Flail", components: ["giants_belt", "sparring_gloves"] },
+    { id: "sunfire_cape", name: "Sunfire Cape", components: ["chain_vest", "giants_belt"] },
+    { id: "tactician_s_cape", name: "Tactician's Cape", components: ["frying_pan", "spatula"] },
+    { id: "tactician_s_crown", name: "Tactician's Crown", components: ["spatula", "spatula"] },
+    { id: "tactician_s_shield", name: "Tactician's Shield", components: ["frying_pan", "frying_pan"] },
+    { id: "thief_s_gloves", name: "Thief's Gloves", components: ["sparring_gloves", "sparring_gloves"] },
+    { id: "titan_s_resolve", name: "Titan's Resolve", components: ["chain_vest", "recurve_bow"] },
+    { id: "void_emblem", name: "Void Emblem", components: ["spatula", "recurve_bow"] },
+    { id: "void_staff", name: "Void Staff", components: ["tear", "recurve_bow"] },
+    { id: "warmog_s_armor", name: "Warmog's Armor", components: ["giants_belt", "giants_belt"] },
+    { id: "yordle_emblem", name: "Yordle Emblem", components: ["spatula", "negatron_cloak"] },
+    { id: "zaun_emblem", name: "Zaun Emblem", components: ["spatula", "sparring_gloves"] }
   ]
 };
