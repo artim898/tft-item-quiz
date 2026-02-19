@@ -123,4 +123,36 @@ function answer(chosenId, chosenBox) {
   answered = true;
   total += 1;
 
-  
+  lockOptions();
+
+  const correctItem = byId(tftData.combined, currentAnswerId);
+
+  if (chosenId === currentAnswerId) {
+    score += 1;
+    chosenBox.classList.add("correct");
+    setFeedback("答啱喇！", "correct");
+  } else {
+    chosenBox.classList.add("wrong");
+    setFeedback(`答錯咗。正確答案係：${correctItem?.name || ""}`, "wrong");
+
+    // Mark correct option
+    const boxes = optionsDiv.querySelectorAll(".item-box");
+    boxes.forEach(b => {
+      const txt = (b.textContent || "").trim();
+      if (txt && (correctItem?.name || "").trim() && txt.includes(correctItem.name.trim())) {
+        b.classList.add("correct");
+      }
+    });
+  }
+
+  updateScore();
+  setNextEnabled(true);
+}
+
+nextBtn.addEventListener("click", () => {
+  if (nextBtn.classList.contains("disabled")) return;
+  createQuestion();
+});
+
+updateScore();
+createQuestion();
