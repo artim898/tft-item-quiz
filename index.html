@@ -1,78 +1,150 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
   <meta charset="UTF-8" />
-  <title>TFT Item Quiz - Set 16</title>
+  <title>TFT 合裝備 Quiz - Set 16</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #111827;
+      font-family: 'Microsoft JhengHei', Arial, sans-serif;
+      background: linear-gradient(135deg, #1e1b4b, #0f0f23);
       color: #e5e7eb;
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 20px;
+      min-height: 100vh;
     }
     h1 {
+      background: linear-gradient(45deg, #ffd700, #ffed4a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 2.5em;
       margin-bottom: 10px;
+      text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
     }
     .question {
       margin-top: 20px;
-      padding: 20px;
-      background: #1f2937;
-      border-radius: 8px;
-      max-width: 600px;
+      padding: 30px;
+      background: rgba(31, 41, 55, 0.9);
+      border-radius: 15px;
+      max-width: 700px;
       text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      backdrop-filter: blur(10px);
     }
     .components, .options {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 10px;
-      margin: 10px 0;
+      gap: 15px;
+      margin: 20px 0;
     }
     .item-box {
-      background: #374151;
-      border-radius: 6px;
-      padding: 8px 10px;
+      background: linear-gradient(145deg, #374151, #4b5563);
+      border-radius: 12px;
+      padding: 15px;
       cursor: pointer;
-      min-width: 120px;
+      min-width: 140px;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .item-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+    }
+    .item-box img {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .item-box span {
+      font-size: 0.9em;
+      font-weight: 500;
     }
     .item-box.correct {
-      border: 2px solid #22c55e;
+      border: 3px solid #22c55e;
+      background: linear-gradient(145deg, #059669, #10b981);
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.6);
     }
     .item-box.wrong {
-      border: 2px solid #ef4444;
+      border: 3px solid #ef4444;
+      background: linear-gradient(145deg, #dc2626, #ef4444);
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+    }
+    .feedback {
+      font-size: 1.2em;
+      font-weight: bold;
+      margin: 20px 0;
+      padding: 15px;
+      border-radius: 10px;
+      min-height: 24px;
+    }
+    .feedback.correct {
+      background: rgba(34, 197, 94, 0.2);
+      color: #22c55e;
+      border: 1px solid #22c55e;
+    }
+    .feedback.wrong {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+      border: 1px solid #ef4444;
     }
     button {
-      margin-top: 10px;
-      padding: 8px 16px;
-      border-radius: 4px;
+      margin-top: 15px;
+      padding: 12px 30px;
+      border-radius: 25px;
       border: none;
       cursor: pointer;
+      font-size: 1.1em;
+      font-weight: bold;
+      transition: all 0.3s ease;
     }
     .next-btn {
-      background: #2563eb;
+      background: linear-gradient(45deg, #3b82f6, #1d4ed8);
       color: white;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
     }
-    .disabled {
-      opacity: 0.6;
-      pointer-events: none;
+    .next-btn:hover:not(.disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(59, 130, 246, 0.6);
+    }
+    .next-btn.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
     .score {
-      margin-top: 10px;
+      margin-top: 20px;
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #ffd700;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+    .instructions {
+      background: rgba(55, 65, 81, 0.5);
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      max-width: 700px;
     }
   </style>
 </head>
 <body>
-  <h1>TFT Item Quiz - Set 16</h1>
-  <p>睇兩件基本裝，揀出正確合成裝。</p>
+  <h1>🔥 TFT 合裝備 Quiz - Set 16 🔥</h1>
+  
+  <div class="instructions">
+    <strong>玩法：</strong> 睇兩件散件圖，揀出正確合成裝！答啱越多越好～
+  </div>
 
   <div class="question">
     <div id="components" class="components"></div>
     <div id="options" class="options"></div>
-    <div id="feedback"></div>
-    <button id="nextBtn" class="next-btn disabled">下一題</button>
+    <div id="feedback" class="feedback"></div>
+    <button id="nextBtn" class="next-btn disabled">下一題 ➡️</button>
     <div class="score">
       <span id="scoreText">得分：0 / 0</span>
     </div>
