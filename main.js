@@ -69,10 +69,10 @@ function lockOptions() {
 }
 
 function createQuestion() {
-  if (!window.tftData) {
-    setFeedback("data.js 未載入（tftData 不存在）", "wrong");
-    return;
-  }
+  if (typeof tftData === "undefined") {
+  setFeedback("data.js 未載入（tftData 不存在）", "wrong");
+  return;
+}
 
   answered = false;
   setFeedback("", "");
