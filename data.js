@@ -68,5 +68,5 @@ const tftData = {
   ]
 };
 
-// 關鍵：確保 main.js 一定拎到
 window.tftData = tftData;
+
