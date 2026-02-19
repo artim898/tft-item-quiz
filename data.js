@@ -67,3 +67,6 @@ const tftData = {
     { id: "zaun_emblem", name: "贊恩徽章", components: ["spatula", "sparring_gloves"] }
   ]
 };
+
+// 關鍵：確保 main.js 一定拎到
+window.tftData = tftData;
